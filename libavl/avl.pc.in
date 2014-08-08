@@ -1,0 +1,13 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: LibAvl
+Description: Store data unde AVL tree form.
+URL: http://redmine.yapbreak.fr/projects/libavl
+Version: @VERSION@
+
+Requires:
+Libs: -L${libdir} -lavl
+Cflags: -I${includedir}

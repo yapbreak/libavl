@@ -58,7 +58,7 @@
  *  // key is used to order data
  *  struct data {
  *      int key;
- *       int value;
+ *      int value;
  *   };
  *
  *   // Function that compares two struct data
@@ -104,7 +104,7 @@
  *
  *       // Initialize a new tree with our three previously defined
  *       // functions to store data structure.
- *       avl_tree = init_dictionnary(data_cmp, data_print, data_delete);
+ *       avl_tree = init_dictionnary(data_cmp, data_print, data_delete, NULL);
  *
  *       tmp.key = 42;
  *       tmp.value = 4242;
@@ -241,13 +241,14 @@ typedef struct _tree {
 
         /** \brief External function to copy data.
          *
-         * \param d Pointer to data to copy.
-         * \return New data allocation with all its fields filled.
+         * \param d Pointer to destination data.
+         * \param s Pointer to source data.
+         * \param l length of data.
          *
          * \note \e You must implement this function. It is necessary for the library
          * to work and depends on your data you want to store.
          */
-        void (* data_copy) (void *, void *);
+        void (* data_copy) (void *, void *, size_t);
 } tree;
 
 
@@ -259,7 +260,7 @@ typedef struct _tree {
 /** \fn tree *init_dictionnary(int (*data_cmp)(void *, void *),
  *                             void (*data_print)(void *),
  *                             void (*data_delete)(void *),
- *                             void (*data_copy)(void *, void *));
+ *                             void (*data_copy)(void *, void *, size_t));
  * \brief Initialize dictionnary.
  *
  * \return Pointer to new tree.
@@ -305,7 +306,7 @@ typedef struct _tree {
 tree *init_dictionnary(int (*data_cmp)(void *, void *),
                        void (*data_print)(void *),
                        void (*data_delete)(void *),
-                       void (*data_copy)(void *, void *));
+                       void (*data_copy)(void *, void *, size_t));
 
 /** \fn int insert_elmt(tree *t, void *data, size_t datasize);
  * \brief Insert new element in tree.

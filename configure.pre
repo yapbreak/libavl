@@ -18,7 +18,7 @@ LT_INIT
 # Checks for libraries.
 AC_ARG_ENABLE(debug,
               AS_HELP_STRING([--enable-debug],
-                             [enable debugging \[default: no\]]),
+                             [enable debugging [default: no]]),
               [case "${enableval}" in
                 yes) debug=true ;;
                 no)  debug=false ;;
@@ -31,14 +31,37 @@ AM_COND_IF(DEBUG,
            AC_DEFINE(LIBAVL_DEBUG, 0, [Define to 1 or higher if this is a debug build]))
 AC_ARG_ENABLE(log,
               AS_HELP_STRING([--enable-log],
-                             [enable log with level from 0 to 5 \[default: 0\]]),
+                             [enable log with level from 0 to 5 [default: 0]]),
               [case "${enableval}" in
                 0|1|2|3|4|5) log=${enableval} ;;
                 *) AC_MSG_ERROR([bad value ${enableval} for --enable-log]) ;;
               esac],
               [log=0])
-AC_DEFINE(LOGLEVEL, ${log},
-          [Define log level of application from 0 (no log) to 5 (enter function log)])
+AM_CONDITIONAL(FUNLOG, test $log -ge 5)
+AM_CONDITIONAL(DEBLOG, test $log -eq 4)
+AM_CONDITIONAL(INFLOG, test $log -eq 3)
+AM_CONDITIONAL(WARLOG, test $log -eq 2)
+AM_CONDITIONAL(ERRLOG, test $log -eq 1)
+
+AM_COND_IF(FUNLOG,
+    [AC_DEFINE(LOGLEVEL, 5, [Define log level of application from 0 (no log) to 5 (enter function log)])],
+    [AM_COND_IF(DEBLOG,
+        [AC_DEFINE(LOGLEVEL, 4, [Define log level of application from 0 (no log) to 5 (enter function log)])],
+        [AM_COND_IF(INFLOG,
+            [AC_DEFINE(LOGLEVEL, 3, [Define log level of application from 0 (no log) to 5 (enter function log)])],
+            [AM_COND_IF(WARLOG,
+                [AC_DEFINE(LOGLEVEL, 2, [Define log level of application from 0 (no log) to 5 (enter function log)])],
+                [AM_COND_IF(ERRLOG,
+                    [AC_DEFINE(LOGLEVEL, 1, [Define log level of application from 0 (no log) to 5 (enter function log)])],
+                    [AC_DEFINE(LOGLEVEL, 0, [Define log level of application from 0 (no log) to 5 (enter function log)])]
+                )]
+            )]
+        )]
+    )]
+)
+
+
+
 
 # Checks for header files.
 AC_CHECK_HEADERS([stdio.h stddef.h stdlib.h string.h])

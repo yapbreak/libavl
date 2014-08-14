@@ -43,8 +43,9 @@ static void data_delete(void *d)
     free(d);
 }
 
-static void data_copy(void *src, void *dst)
+static void data_copy(void *src, void *dst, size_t len)
 {
+    (void) len;
     *((int *) dst) = *((int *) src);
 }
 

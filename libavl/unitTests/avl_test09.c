@@ -50,9 +50,9 @@ static void data_delete(void *d)
     free(d);
 }
 
-static void data_copy(void *src, void *dst)
+static void data_copy(void *src, void *dst, size_t len)
 {
-    memcpy(dst, src, sizeof(struct _tree_data));
+    memcpy(dst, src, len);
 }
 
 #define MAX_ELEMENT 10000

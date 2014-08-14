@@ -60,8 +60,9 @@ void data_delete(void *d)
 }
 
 // Function that copy data structure
-void data_copy(void *src, void *dst)
+void data_copy(void *src, void *dst, size_t len)
 {
+    (void) len;
     struct data *s = (struct data *) src;
     struct data *d = (struct data *) dst;
 

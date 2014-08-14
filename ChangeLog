@@ -1,0 +1,5 @@
+2014-08-14 Adrien Oliva <adrien.oliva@yapbreak.fr>
+
+	* First version of libAvl with Autotools compilation
+	see wiki at http://redmine.yapbreak.fr/projects/libavl/wiki
+	to know how to use it.

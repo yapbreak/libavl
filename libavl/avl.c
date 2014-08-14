@@ -169,14 +169,11 @@
  * used in a tree when you want to destroy it with \b delete_tree.
  *
  */
-#ifndef LOGLEVEL
-#   define LOGLEVEL 0
-#endif
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
+#include "config.h"
 #include "avl.h"
 #include "syslog.h"
 
@@ -833,11 +830,12 @@ void stub__data_delete(void *d)
     free(d);
 }
 
-/** \fn void stub__data_copy(void *src, void *dst)
+/** \fn void stub__data_copy(void *src, void *dst, size_t len)
  * \brief Stub function used if no data_copy function is provided.
  *
  * \param src Data source
  * \param dst Data destination
+ * \param len Size of data to copy
  *
  * This function call \c memcpy to copy \c src into \c dst.
  *
@@ -845,9 +843,9 @@ void stub__data_delete(void *d)
  * than a single static structure, you must provide your \c data_copy
  * implementation.
  */
-void stub__data_copy(void *src, void *dst)
+void stub__data_copy(void *src, void *dst, size_t len)
 {
-    memcpy(dst, src, sizeof(src));
+    memcpy(dst, src, len);
 }
 
 /* ************************************************************************* *\
@@ -857,7 +855,7 @@ void stub__data_copy(void *src, void *dst)
 /** \fn tree *init_dictionnary(int (*data_cmp)(void *, void *),
  *                             void (*data_print)(void *),
  *                             void (*data_delete)(void *),
- *                             void *(*data_copy)(void *));
+ *                             void *(*data_copy)(void *, void *, size_t));
  * \brief Initialize dictionnary.
  *
  * \return Pointer to new tree.
@@ -903,7 +901,7 @@ void stub__data_copy(void *src, void *dst)
 tree *init_dictionnary(int (*data_cmp)(void *, void *),
                        void (*data_print)(void *),
                        void (*data_delete)(void *),
-                       void (*data_copy)(void *, void *))
+                       void (*data_copy)(void *, void *, size_t len))
 {
     // New tree allocation
     tree *t = malloc(sizeof(tree));
@@ -942,7 +940,7 @@ unsigned int insert_elmt(tree *t, void *data, size_t datasize)
     // Allocate memory for the new data and copy data.
     to_add = malloc(sizeof(struct _node));
     to_add->data = malloc(datasize);
-    t->data_copy(data, to_add->data);
+    t->data_copy(data, to_add->data, datasize);
     to_add->height = 0;
     to_add->left = to_add->right = NULL;
 

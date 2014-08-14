@@ -21,6 +21,8 @@
 #ifndef __SYSLOG_H__
 #define __SYSLOG_H__
 
+#include "config.h"
+
 #if LOGLEVEL != 0
 #   include <stdio.h>
 #endif

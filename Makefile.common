@@ -1,0 +1,8 @@
+ACLOCAL_AMFLAGS = -I $(top_srcdir)/m4
+
+AM_CFLAGS = -Wall -Wextra -Werror -O3
+
+if DEBUG
+AM_CFLAGS += -ggdb3
+endif
+

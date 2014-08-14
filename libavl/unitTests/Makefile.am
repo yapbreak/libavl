@@ -1,3 +1,5 @@
+ACLOCAL_AMFLAGS = -I $(top_srcdir)/m4
+
 include $(top_srcdir)/Makefile.common
 
 # Unit test for AVL

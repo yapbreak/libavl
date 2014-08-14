@@ -32,3 +32,6 @@ cpptest
 *.trs
 test-driver
 *.pc
+*.tar.gz
+*.sig
+*.md5

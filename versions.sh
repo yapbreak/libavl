@@ -6,21 +6,21 @@ REPORT="yapbreak@yapbreak.fr"
 gittag=$(git describe --tags --always)
 
 if echo $gittag | grep "[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*.*" > /dev/null 2>&1; then
-    major=$(echo $gittag | sed 's|\([0-9][0-9]*\)\..*|\1|')
-    minor=$(echo $gittag | sed 's|[0-9][0-9]*\.\([0-9][0-9]*\)\..*|\1|')
-    build=$(echo $gittag | sed 's|[0-9][0-9]*\.[0-9][0-9]*\.\([0-9][0-9]*\).*|\1|')
+    current=$(echo $gittag | sed 's|\([0-9][0-9]*\)\..*|\1|')
+    age=$(echo $gittag | sed 's|[0-9][0-9]*\.\([0-9][0-9]*\)\..*|\1|')
+    revision=$(echo $gittag | sed 's|[0-9][0-9]*\.[0-9][0-9]*\.\([0-9][0-9]*\).*|\1|')
 else
-    major=0
-    minor=0
-    build=0
+    current=0
+    age=0
+    revision=0
 fi
 
-echo "Prepare $PKGNAME version ${major}.${minor}.${build}"
+echo "Prepare $PKGNAME version $(( ${current} - ${age} )).${age}.${revision}"
 
 cp configure.pre configure.ac
 sed -i "s|AC_INIT(.*)|AC_INIT([${PKGNAME}], [${gittag}], [${REPORT}])|" configure.ac
-sed -i "s|___MAJOR___|$major|g" configure.ac
-sed -i "s|___MINOR___|$minor|g" configure.ac
-sed -i "s|___BUILD___|$build|g" configure.ac
+sed -i "s|___CURRENT___|$current|g" configure.ac
+sed -i "s|___REVISION___|$revision|g" configure.ac
+sed -i "s|___AGE___|$age|g" configure.ac
 
 

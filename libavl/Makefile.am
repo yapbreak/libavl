@@ -7,6 +7,6 @@ include_HEADERS = avl.h
 
 libavl_la_SOURCES = avl.c
 libavl_la_CFLAGS = $(AM_CFLAGS) -fPIC
-libavl_la_LDFLAGS = -version-info @VERSION_MAJOR@:@VERSION_MINOR@:@VERSION_BUILD@
+libavl_la_LDFLAGS = -version-info @VERSION_CURRENT@:@VERSION_REVISION@:@VERSION_AGE@
 
 SUBDIRS = unitTests

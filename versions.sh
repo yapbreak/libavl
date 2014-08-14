@@ -1,6 +1,6 @@
 #!/bin/sh
 
-PKGNAME="YapLog"
+PKGNAME="LibAvl"
 REPORT="yapbreak@yapbreak.fr"
 
 gittag=$(git describe --tags --always)

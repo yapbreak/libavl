@@ -25,6 +25,8 @@ AC_PROG_MAKE_SET
 LT_INIT
 
 # Checks for libraries.
+extra_CFLAGS=""
+extra_LDFLAGS=""
 AC_ARG_ENABLE(debug,
               AS_HELP_STRING([--enable-debug],
                              [enable debugging [default: no]]),
@@ -68,9 +70,21 @@ AM_COND_IF(FUNLOG,
         )]
     )]
 )
+AC_ARG_ENABLE([coverage],
+              AS_HELP_STRING([--enable-coverage],
+                             [enable coverage report while testing.]),
+              [],
+              [enable_coverage=false])
+if test "$GCC" = "yes"; then
+    AM_CONDITIONAL(COVERAGE, test "${enable_coverage}" = "yes")
+    AM_COND_IF(COVERAGE,
+               [extra_CFLAGS+="--coverage"
+                extra_LDFLAGS+="-lgcov"
+               ])
+fi
 
-
-
+AC_SUBST([extra_CFLAGS])
+AC_SUBST([extra_LDFLAGS])
 
 # Checks for header files.
 AC_CHECK_HEADERS([stdio.h stddef.h stdlib.h string.h])
@@ -89,4 +103,5 @@ AC_CONFIG_FILES([Makefile
                  libavl/Makefile
                  libavl/unitTests/Makefile
                  libavl/avl.pc])
+
 AC_OUTPUT

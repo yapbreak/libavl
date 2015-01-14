@@ -1,4 +1,5 @@
-AM_CFLAGS = -Wall -Wextra -Werror -O3
+AM_CFLAGS = -Wall -Wextra -Werror ${extra_CFLAGS}
+AM_LDFLAGS = ${extra_LDFLAGS}
 
 if DEBUG
 AM_CFLAGS += -ggdb3

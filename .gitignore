@@ -35,3 +35,7 @@ test-driver
 *.tar.gz
 *.sig
 *.md5
+coverage-report*
+*.gcno
+*.gcda
+avltest

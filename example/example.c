@@ -107,7 +107,7 @@ int main(int argc, char **argv)
         printf("Key 42 exist in tree.\n");
 
     if (get_data(avl_tree, &tmp, sizeof(struct data)))
-        printf("Now, tmp.key is equal to 4242\n");
+        printf("Now, tmp.value is equal to 4242: %d\n", tmp.value);
 
     delete_node(avl_tree, &tmp);
     if (!is_present(avl_tree, &tmp))

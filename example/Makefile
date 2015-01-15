@@ -2,22 +2,17 @@
 
 .PHONY: all clean distclean
 
-all: ../libavl/libavl.so example.x
-
-# Be sure that libavl is compiled
-../libavl/libavl.so:
-	@(cd ../libavl/ && $(MAKE))
+all: example.x
 
 example.o: example.c
-	gcc -o example.o -c example.c -I../libavl/
+	gcc -o example.o -c example.c
 
 example.x: example.o
-	gcc -o example.x -L../libavl/ example.o -lavl
-	@(echo "Before run, add \"../libavl/\" to your LD_LIBRARY_PATH env var.")
+	gcc -o example.x example.o -lavl
 
 clean:
-	rm example.x
+	rm -rf example.o
 
 distclean: clean
-	rm example.o
+	rm -rf example.x
 

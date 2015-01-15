@@ -5,7 +5,7 @@
 all: example.x
 
 example.o: example.c
-	gcc -o example.o -c example.c
+	gcc -g -o example.o -c example.c
 
 example.x: example.o
 	gcc -o example.x example.o -lavl

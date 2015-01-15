@@ -1,0 +1,53 @@
+#!/bin/sh
+
+VERSION="@VERSION@"
+PACKAGE="@PACKAGE_STRING@"
+BUG_REPORT="@PACKAGE_BUGREPORT@"
+
+
+
+RED="\e[0;31m"
+GRN="\e[0;32m"
+NRM="\e[m"
+BLD="\e[1m"
+
+TEST_TOTAL=0
+TEST_PASS=0
+TEST_FAIL=0
+
+while test $# -ne 0; do
+	for t in $(find "$1" \( ! -regex '.*/\..*' \) -type f | sort); do
+		if test -x "$t"; then
+			libtool --mode=execute valgrind -q --leak-check=full "$t" > "${t}.log" 2> "${t}.valgrind"
+			if test $(wc -c "${t}.valgrind" | cut -d' ' -f 1) -ne 0; then
+				echo -e "${RED}FAIL${NRM}: $(basename "${t}")"
+				TEST_FAIL=$(( $TEST_FAIL + 1 ))
+			else
+				echo -e "${GRN}PASS${NRM}: $(basename "${t}")"
+				TEST_PASS=$(( $TEST_PASS + 1 ))
+			fi
+			TEST_TOTAL=$(( $TEST_TOTAL + 1 ))
+		fi
+	done
+	shift
+done
+
+if test $TEST_FAIL -ne 0; then
+	echo -en "${RED}"
+else
+	echo -en "${GRN}"
+fi
+echo -e "============================================================================="
+echo -e "Valgrind summary for ${PACKAGE}"
+echo -e "=============================================================================${NRM}"
+echo -e "${BLD}# TOTAL: ${TEST_TOTAL}${NRM}"
+echo -e "${GRN}# PASS: ${TEST_PASS}${NRM}"
+echo -e "${RED}# FAIL: ${TEST_FAIL}${NRM}"
+if test $TEST_FAIL -ne 0; then
+	echo -en "${RED}"
+	echo -e "============================================================================="
+	echo -e "Please report to ${BUG_REPORT}"
+else
+	echo -en "${GRN}"
+fi
+echo -e "=============================================================================${NRM}"

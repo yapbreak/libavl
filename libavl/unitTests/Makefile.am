@@ -37,16 +37,7 @@ AM_CFLAGS += -I..
 LDADD = ../libavl.la
 
 valgrind: $(TESTS)
-	if test -n "$(TESTS)"; then\
-		for t in $(TESTS);\
-		do\
-			echo "Run valgrind on $$t.";\
-			libtool --mode=execute valgrind -v --leak-check=full $$t 2>&1 |\
-									tee $$t.valgrind |\
-									sed '/Memcheck/,/HEAP SUMMARY/d';\
-			echo "---------------------------------";\
-		done;\
-	fi
+	test -n "$(TESTS)" && sh $(top_srcdir)/valgrind-driver .
 
 CLEANFILES = *.valgrind *.gcda *.gcno
 

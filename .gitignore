@@ -40,3 +40,5 @@ coverage-report*
 *.gcda
 avltest*
 *.x
+*.valgrind
+valgrind-driver

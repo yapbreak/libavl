@@ -27,7 +27,7 @@ $ ./configure --enable-log=#
 where # is 0 for No log (default), 1 for Errors, 2 for Warnings,
 3 for Information, 4 for Debug and 5 for Functions.
 
-Moreover, you can add debug symbal with
+Moreover, you can add debug symbol with
 
 $ ./configure --enable-debug
 

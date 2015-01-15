@@ -13,7 +13,9 @@ TESTS = avltest01\
 		avltest08\
 		avltest09\
 		avltest10\
-		avltest11
+		avltest11\
+		avltest12\
+		avltest13
 
 check_PROGRAMS = $(TESTS)
 
@@ -28,6 +30,8 @@ avltest08_SOURCES = avl_test08.c
 avltest09_SOURCES = avl_test09.c
 avltest10_SOURCES = avl_test10.c
 avltest11_SOURCES = avl_test11.c
+avltest12_SOURCES = avl_test12.c
+avltest13_SOURCES = avl_test13.c
 
 AM_CFLAGS += -I..
 LDADD = ../libavl.la

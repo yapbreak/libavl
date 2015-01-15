@@ -172,6 +172,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
 #include "config.h"
 #include "avl.h"
@@ -486,10 +487,11 @@ int delete_node_recur(node *root, void *data,
  * \param n Root of tree where element must be inserted.
  * \param add_node Element to be added in tree.
  * \param data_cmp Function to compare nodes.
+ * \param data_delete Function to delete a node.
  *
  * \warning If you use this function you probably make a mistake.
  */
-int insert_elmt_recur(node *n, node add_node, int (*data_cmp) (void *, void *))
+int insert_elmt_recur(node *n, node add_node, int (*data_cmp) (void *, void *), void (*data_delete) (void *))
 {
     int present = 0; // 1 means that data already present
     int cmp;
@@ -508,15 +510,24 @@ int insert_elmt_recur(node *n, node add_node, int (*data_cmp) (void *, void *))
     cmp = data_cmp((*n)->data, add_node->data);
 
     // Check if current node is the node you want to add
-    if (cmp == 0)
-        // node already exist
+    if (cmp == 0) {
+        // node already exist, update it.
+        node old_n = *n;
+        (*n) = add_node;
+        (*n)->height = old_n->height;
+        (*n)->left = old_n->left;
+        (*n)->right = old_n->right;
+        data_delete(old_n->data);
+        free(old_n);
+
         return 1;
+    }
 
     if (cmp > 0) {
         // Current node is higher that node you want to add
         // Insert it on left subtree.
         DLOG("Down into left level %d", ++level_insert);
-        present = insert_elmt_recur(&(*n)->left, add_node, data_cmp);
+        present = insert_elmt_recur(&(*n)->left, add_node, data_cmp, data_delete);
         DLOG("Out of level %d", level_insert--);
 
         if (!present) {
@@ -530,7 +541,7 @@ int insert_elmt_recur(node *n, node add_node, int (*data_cmp) (void *, void *))
         // Current node is smaller that node you want to add
         // Insert it on right subtree.
         DLOG("Down into right level %d", ++level_insert);
-        present = insert_elmt_recur(&(*n)->right, add_node, data_cmp);
+        present = insert_elmt_recur(&(*n)->right, add_node, data_cmp, data_delete);
         DLOG("Out of level %d", level_insert--);
 
         if (!present) {
@@ -569,14 +580,8 @@ void verif_avl(node n,
     unsigned hd;
 
     // Check order of data.
-    if (tree_min && data_cmp(n->data, data_min) < 0) {
-        DLOG("Tree->data < data_min");
-        exit(-1);
-    }
-    if (tree_max && data_cmp(n->data, data_max) > 0) {
-        DLOG("Tree->data > data_min");
-        exit(-2);
-    }
+    assert(!tree_min || data_cmp(n->data, data_min) >= 0);
+    assert(!tree_max || data_cmp(n->data, data_max) <= 0);
 
     // Check avl left subtree.
     if (n->left != NULL) {
@@ -607,17 +612,9 @@ void verif_avl(node n,
 
     // Check height consistency of each subtree
     if (hg <= hd) {
-        if (!(hd + 1 == n->height && hg + 2 >= n->height)) {
-            DLOG("(hg<hd) Error in tree height: hd %u | hg %u | tree->height %u",
-                    hd, hg, n->height);
-            exit(-3);
-        }
+        assert(hd + 1 == n->height && hg + 2 >= n->height);
     } else {
-        if (!(hg + 1 == n->height && hd + 2 >= n->height)) {
-            DLOG("(hg>hd) Error in tree height: hd %u | hg %u | tree->height %u",
-                    hd, hg, n->height);
-            exit(-4);
-        }
+        assert(hg + 1 == n->height && hg + 2 >= n->height);
     }
 }
 
@@ -927,15 +924,12 @@ tree *init_dictionnary(int (*data_cmp)(void *, void *),
  *
  * This function allocate a new memory space with the given size
  * and copy object pointed by \c data to the newly created space.
+ * If key already exists in tree, data is updated.
  */
 unsigned int insert_elmt(tree *t, void *data, size_t datasize)
 {
     node to_add = NULL;
     int present = 0;
-
-    // check if data is already present
-    if (is_present(t, data))
-        return t->count;
 
     // Allocate memory for the new data and copy data.
     to_add = malloc(sizeof(struct _node));
@@ -945,7 +939,7 @@ unsigned int insert_elmt(tree *t, void *data, size_t datasize)
     to_add->left = to_add->right = NULL;
 
     // recursively insert data in tree.
-    present = insert_elmt_recur(&(t->root), to_add, t->data_cmp);
+    present = insert_elmt_recur(&(t->root), to_add, t->data_cmp, t->data_delete);
 
     // increment counter of element if so.
     if (!present) {

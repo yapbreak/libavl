@@ -52,12 +52,11 @@ int main(int argc, char *argv[])
 
     tree *first = NULL;
     struct _tree_data data[MAX_ELEMENT];
-    struct _tree_data tmp_elmnt;
-    struct _tree_data current_min;
+    struct _tree_data look_for_data;
     unsigned int result;
+    int bool_result;
     unsigned int element_in_tree = 0;
     int i = 0;
-    int j = 0;
 
     unsigned long rand_seed = (unsigned long) time(NULL);
     printf("Random seed: %lu\n", rand_seed);
@@ -67,7 +66,6 @@ int main(int argc, char *argv[])
         data[i].key = rand();
         data[i].value = rand();
     }
-
 
     verif_tree(first);
 
@@ -81,10 +79,11 @@ int main(int argc, char *argv[])
     // Add data
     verif_tree(first);
     for (i = 0; i < MAX_ELEMENT; i++) {
-        tmp_elmnt.key = data[i].key;
-        if (!is_present(first, &(tmp_elmnt))) {
+        look_for_data.key = data[i].key;
+        if (!is_present(first, &(look_for_data))) {
             element_in_tree++;
         }
+        ILOG("Insert <%d, %d>", data[i].key, data[i].value);
         result = insert_elmt(first, &(data[i]), sizeof(struct _tree_data));
         if (result != element_in_tree) {
             ELOG("Wrong result of inserted element");
@@ -93,35 +92,57 @@ int main(int argc, char *argv[])
         verif_tree(first);
     }
 
-    current_min.key     = (int) 0x80000000;
-    current_min.value   = (int) 0x80000000;
-
-    for (i = 0; i < MAX_ELEMENT && element_in_tree != 0; i++) {
-        tmp_elmnt.key       = (int) 0x7fffffff;
-        tmp_elmnt.value     = (int) 0x7fffffff;
-        // Get minimum data
-        for (j = 0; j < MAX_ELEMENT; j++) {
-            if (    data[j].key < tmp_elmnt.key
-                &&  data[j].key > current_min.key) {
-                tmp_elmnt.key   = data[j].key;
-                tmp_elmnt.value = data[j].value;
-            }
-
-        }
-
-        current_min.key     = tmp_elmnt.key;
-        current_min.value   = tmp_elmnt.value;
-
-        if (!is_present(first, &tmp_elmnt)) {
-            ELOG("Minimum data not in tree");
+    // Get data
+    for (i = MAX_ELEMENT - 1; i >= 0; i--) {
+        look_for_data.key = data[i].key;
+        bool_result = get_data(first, &(look_for_data), sizeof(struct _tree_data));
+        if (!bool_result) {
+            ELOG("Data not found");
             return EXIT_FAILURE;
         }
-        delete_node_min(first);
-        if (is_present(first, &tmp_elmnt)) {
-            ELOG("Minimum element deleted");
+        ILOG("Get <%d, %d>", look_for_data.key, look_for_data.value);
+        if (look_for_data.key != data[i].key || look_for_data.value != data[i].value) {
+            ELOG("Not the good data retrieve.");
             return EXIT_FAILURE;
         }
-        element_in_tree--;
+        verif_tree(first);
+    }
+
+    // Update data with new values
+    for (i = 0; i < MAX_ELEMENT; i++) {
+        data[i].value = rand();
+    }
+
+    // Re-Add data with new values
+    verif_tree(first);
+    for (i = 0; i < MAX_ELEMENT; i++) {
+        look_for_data.key = data[i].key;
+        if (!is_present(first, &(look_for_data))) {
+            ELOG("Element not found in tree.");
+            return EXIT_FAILURE;
+        }
+        ILOG("Insert <%d, %d>", data[i].key, data[i].value);
+        result = insert_elmt(first, &(data[i]), sizeof(struct _tree_data));
+        if (result != element_in_tree) {
+            ELOG("Wrong result of inserted element");
+            return EXIT_FAILURE;
+        }
+        verif_tree(first);
+    }
+
+    // Get data
+    for (i = MAX_ELEMENT - 1; i >= 0; i--) {
+        look_for_data.key = data[i].key;
+        bool_result = get_data(first, &(look_for_data), sizeof(struct _tree_data));
+        if (!bool_result) {
+            ELOG("Data not found");
+            return EXIT_FAILURE;
+        }
+        ILOG("Get <%d, %d>", look_for_data.key, look_for_data.value);
+        if (look_for_data.key != data[i].key || look_for_data.value != data[i].value) {
+            ELOG("Not the good data retrieve.");
+            return EXIT_FAILURE;
+        }
         verif_tree(first);
     }
 

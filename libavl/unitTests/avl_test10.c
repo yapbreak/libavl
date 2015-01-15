@@ -81,7 +81,7 @@ int main(int argc, char *argv[])
     int count = 0;
 
     unsigned long rand_seed = (unsigned long) time(NULL);
-    ILOG("Random seed: %lu", rand_seed);
+    printf("Random seed: %lu\n", rand_seed);
     srand(rand_seed);
 
     node_min.key = rand();

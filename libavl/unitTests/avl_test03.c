@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
     unsigned int result;
 
     unsigned long rand_seed = (unsigned long) time(NULL);
-    ILOG("Random seed: %lu", rand_seed);
+    printf("Random seed: %lu\n", rand_seed);
     srand(rand_seed);
     // Try to allocate a new tree.
     first = init_dictionnary(data_cmp, NULL, data_delete, NULL);

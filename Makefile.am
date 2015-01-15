@@ -14,7 +14,7 @@ coverage-report:
 	lcov --compat-libtool --directory "$(top_srcdir)" --capture --output-file "$(top_srcdir)/coverage-report.info"
 	genhtml --highlight --legend --output-directory "$(top_srcdir)/coverage-report" --prefix "$(top_srcdir)" "$(top_srcdir)/coverage-report.info"
 
-coverage: coverage-clean check coverage-report
+coverage: clean coverage-clean all check coverage-report
 
 ALLPHONY += coverage-clean coverage-report
 else

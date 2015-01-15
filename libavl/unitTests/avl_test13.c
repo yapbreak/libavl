@@ -18,10 +18,10 @@
  *   0. You just DO WHAT THE FUCK YOU WANT TO.
  */
 
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <string.h>
 
 #include "../syslog.h"
 #include "../avl.h"
@@ -31,34 +31,7 @@ struct _tree_data {
     int value;
 };
 
-static int data_cmp(void *a, void *b)
-{
-    struct _tree_data aa = *((struct _tree_data *) a);
-    struct _tree_data bb = *((struct _tree_data *) b);
-
-    return aa.key - bb.key;
-}
-
-static void data_delete(void *d)
-{
-    free(d);
-}
-
-static void data_copy(void *src, void *dst, size_t len)
-{
-    memcpy(dst, src, len);
-}
-
 #define MAX_ELEMENT 10000
-
-static void count_treat(void *n, void *param)
-{
-    struct _tree_data *data = (struct _tree_data *) n;
-
-    if (param != NULL) {
-        *((unsigned int *) param) += (unsigned) data->value;
-    }
-}
 
 int main(int argc, char *argv[])
 {
@@ -71,7 +44,6 @@ int main(int argc, char *argv[])
     unsigned int result;
     unsigned int element_in_tree = 0;
     int i = 0;
-    unsigned int r = 0;
 
     unsigned long rand_seed = (unsigned long) time(NULL);
     printf("Random seed: %lu\n", rand_seed);
@@ -79,27 +51,18 @@ int main(int argc, char *argv[])
 
     for (i = 0; i < MAX_ELEMENT; i++) {
         data[i].key = rand();
-        data[i].value = 1;
+        data[i].value = rand();
     }
 
-    // explore tree on a NULL tree
-    explore_tree(first, count_treat, &r);
-    if (r != 0) {
-        ELOG("Wrong result on NULL tree");
-        return EXIT_FAILURE;
-    }
+
+    verif_tree(first);
+    // Try to print an null tree.
+    print_tree(first);
 
     // Try to allocate a new tree.
-    first = init_dictionnary(data_cmp, NULL, data_delete, data_copy);
+    first = init_dictionnary(NULL, NULL, NULL, NULL);
     if (first == NULL) {
         ELOG("Init dictionnary error");
-        return EXIT_FAILURE;
-    }
-
-    // explore tree on an empty tree
-    explore_tree(first, count_treat, &r);
-    if (r != 0) {
-        ELOG("Wrong result on empty tree");
         return EXIT_FAILURE;
     }
 
@@ -118,11 +81,7 @@ int main(int argc, char *argv[])
         verif_tree(first);
     }
 
-    explore_tree(first, count_treat, &r);
-    if (r != element_in_tree) {
-        ELOG("Wrong result on empty tree: %d != %d", r, element_in_tree);
-        return EXIT_FAILURE;
-    }
+    print_tree(first);
 
     // Try to delete it
     delete_tree(first);

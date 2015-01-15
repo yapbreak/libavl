@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
     int i = 0;
 
     unsigned long rand_seed = (unsigned long) time(NULL);
-    ILOG("Random seed: %lu", rand_seed);
+    printf("Random seed: %lu\n", rand_seed);
     srand(rand_seed);
 
     for (i = 0; i < MAX_ELEMENT; i++) {
@@ -120,7 +120,7 @@ int main(int argc, char *argv[])
             ELOG("Data not found");
             return EXIT_FAILURE;
         }
-        if (look_for_data.key != data[i].key && look_for_data.value != data[i].value) {
+        if (look_for_data.key != data[i].key || look_for_data.value != data[i].value) {
             ELOG("Not the good data retrieve.");
             return EXIT_FAILURE;
         }

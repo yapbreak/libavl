@@ -23,7 +23,7 @@
  * \author Adrien Oliva
  * \date May, 24th, 2011
  * \brief Generic AVL-tree library.
- * \version 1.0.0
+ * \version 1.0.1
  *
  * Implementation of an AVL tree to store generic data.
  * In computer science, an AVL tree is a self-balancing binary search tree,
@@ -96,6 +96,12 @@
  *       }
  *   }
  *
+ *   // Function that copy data structure into another one
+ *   void data_copy(void *src, void *dst, size_t len)
+ *   {
+ *       memcpy(dst, src, len);
+ *   }
+ *
  *   int main(int argc, char *argv)
  *   {
  *       tree *avl_tree = NULL;
@@ -104,7 +110,7 @@
  *
  *       // Initialize a new tree with our three previously defined
  *       // functions to store data structure.
- *       avl_tree = init_dictionnary(data_cmp, data_print, data_delete, NULL);
+ *       avl_tree = init_dictionnary(data_cmp, data_print, data_delete, data_copy);
  *
  *       tmp.key = 42;
  *       tmp.value = 4242;
@@ -173,8 +179,6 @@
 #define __AVL_H__
 
 #include <stddef.h>
-
-
 
 /** \struct _node
  * \brief Node of a tree
@@ -251,8 +255,6 @@ typedef struct _tree {
         void (* data_copy) (void *, void *, size_t);
 } tree;
 
-
-
 /* ************************************************************************* *\
 |*                      EXTERNAL FUNCTION                                    *|
 \* ************************************************************************* */
@@ -308,7 +310,7 @@ tree *init_dictionnary(int (*data_cmp)(void *, void *),
                        void (*data_delete)(void *),
                        void (*data_copy)(void *, void *, size_t));
 
-/** \fn int insert_elmt(tree *t, void *data, size_t datasize);
+/* \fn int insert_elmt(tree *t, void *data, size_t datasize);
  * \brief Insert new element in tree.
  *
  * \return Number of element inserted in tree.
@@ -318,6 +320,7 @@ tree *init_dictionnary(int (*data_cmp)(void *, void *),
  *
  * This function allocate a new memory space with the given size
  * and copy object pointed by \c data to the newly created space.
+ * If key already exists in tree, data is updated.
  */
 unsigned int insert_elmt(tree *t, void *data, size_t datasize);
 

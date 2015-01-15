@@ -48,5 +48,5 @@ int main(int argc, char *argv[])
     // Try to delete a null tree
     delete_tree(NULL);
 
-    return EXIT_FAILURE;
+    return EXIT_SUCCESS;
 }

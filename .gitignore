@@ -42,3 +42,4 @@ avltest*
 *.x
 *.valgrind
 valgrind-driver
+Doxyfile

@@ -50,9 +50,9 @@
  * Here is an example of code that store structure in AVL tree:
  *
  * <pre>
- *  #include <stdlib.h>
- *  #include <stdio.h>
- *  #include "avl.h"
+ *  \#include <stdlib.h>
+ *  \#include <stdio.h>
+ *  \#include "avl.h"
  *
  *  // Structure we want to store
  *  // key is used to order data

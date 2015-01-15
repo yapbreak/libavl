@@ -103,6 +103,7 @@ AC_CONFIG_FILES([Makefile
                  libavl/Makefile
                  libavl/unitTests/Makefile
                  libavl/avl.pc
-                 valgrind-driver])
+                 valgrind-driver
+                 Doxyfile])
 
 AC_OUTPUT

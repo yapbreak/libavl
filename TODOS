@@ -1,1 +1,2 @@
-- Put install script in Makefile
+- Add profiling report ability.
+- Generate makepkg for Pacman/Dpkg/Rpm package managers

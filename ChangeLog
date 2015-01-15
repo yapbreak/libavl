@@ -1,3 +1,13 @@
+????-??-?? Adrien Oliva <adrien.oliva@yapbreak.fr>
+
+	* Add support for coverage tests. Run ./configure --enable-coverage
+	and make coverage in project root directory.
+	* Refactor unit test to get better result.
+	* Add tests to increase coverage to 100% (without logs).
+	* Add support for memory checking. Go down in libavl/unitTests/ then
+	run make valgrind.
+
+
 2014-08-14 Adrien Oliva <adrien.oliva@yapbreak.fr>
 
 	* First version of libAvl with Autotools compilation

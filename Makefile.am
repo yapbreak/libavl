@@ -22,9 +22,10 @@ coverage:
 	@(echo "Coverage support is disabled. Re-run configure with --enable-coverage switch.")
 endif
 
-CLEANFILES = "$(top_srcdir)/coverage-report.info"
+CLEANFILES = $(top_srcdir)/coverage-report.info
 
 clean-local:
 	@rm -rf "$(top_srcdir)/coverage-report"
+
 
 .PHONY: $(ALLPHONY)

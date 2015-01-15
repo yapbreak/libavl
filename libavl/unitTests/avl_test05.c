@@ -33,11 +33,6 @@ static int data_cmp(void *a, void *b)
     return aa - bb;
 }
 
-static void data_print(void *d)
-{
-    printf("%p|%d", d, *((int *) d));
-}
-
 static void data_delete(void *d)
 {
     free(d);
@@ -45,8 +40,11 @@ static void data_delete(void *d)
 
 #define MAX_ELEMENT 10000
 
-char *delete_tests()
+int main(int argc, char *argv[])
 {
+    (void) argc;
+    (void) argv;
+
     tree *first = NULL;
     int data[MAX_ELEMENT];
     unsigned int result;
@@ -65,10 +63,10 @@ char *delete_tests()
     verif_tree(first);
 
     // Try to allocate a new tree.
-    first = init_dictionnary(data_cmp, data_print, data_delete, NULL);
+    first = init_dictionnary(data_cmp, NULL, data_delete, NULL);
     if (first == NULL) {
         ELOG("Init dictionnary error");
-        return "Init dictionnary error";
+        return EXIT_FAILURE;
     }
 
     // Add data
@@ -80,7 +78,7 @@ char *delete_tests()
         result = insert_elmt(first, &(data[i]), sizeof(int));
         if (result != element_in_tree) {
             ELOG("Wrong result of inserted element");
-            return "Wrong result of inserted element";
+            return EXIT_FAILURE;
         }
         verif_tree(first);
     }
@@ -90,16 +88,13 @@ char *delete_tests()
         delete_node(first, &(data[i]));
         if (is_present(first, &(data[i]))) {
             ELOG("Data not deleted");
-            return "Data not deleted";
+            return EXIT_FAILURE;
         }
         verif_tree(first);
     }
 
-
     // Try to delete it
     delete_tree(first);
 
-
-
-    return NULL;
+    return EXIT_SUCCESS;
 }

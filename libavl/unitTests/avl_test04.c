@@ -33,11 +33,6 @@ static int data_cmp(void *a, void *b)
     return aa - bb;
 }
 
-static void data_print(void *d)
-{
-    printf("%p|%d", d, *((int *) d));
-}
-
 static void data_delete(void *d)
 {
     free(d);
@@ -45,8 +40,11 @@ static void data_delete(void *d)
 
 #define MAX_ELEMENT 10000
 
-char *add_existing_tests()
+int main(int argc, char *argv[])
 {
+    (void) argc;
+    (void) argv;
+
     tree *first = NULL;
     int data[MAX_ELEMENT];
     unsigned int result;
@@ -61,12 +59,11 @@ char *add_existing_tests()
         data[i] = rand();
     }
 
-
     // Try to allocate a new tree.
-    first = init_dictionnary(data_cmp, data_print, data_delete, NULL);
+    first = init_dictionnary(data_cmp, NULL, data_delete, NULL);
     if (first == NULL) {
         ELOG("Init dictionnary error");
-        return "Init dictionnary error";
+        return EXIT_FAILURE;
     }
 
     verif_tree(first);
@@ -77,7 +74,7 @@ char *add_existing_tests()
         result = insert_elmt(first, &(data[i]), sizeof(int));
         if (result != element_in_tree) {
             ELOG("Wrong result of inserted element");
-            return "Wrong result of inserted element";
+            return EXIT_FAILURE;
         }
         verif_tree(first);
     }
@@ -86,21 +83,18 @@ char *add_existing_tests()
     for (i = 0; i < MAX_ELEMENT; i++) {
         if (!is_present(first, &(data[i]))) {
             ELOG("Element is not present, it said! F**k");
-            return "Element is not present";
+            return EXIT_FAILURE;
         }
         result = insert_elmt(first, &(data[i]), sizeof(int));
         if (result != element_in_tree) {
             ELOG("Wrong result of inserted element");
-            return "Wrong result of inserted element";
+            return EXIT_FAILURE;
         }
         verif_tree(first);
     }
 
-
     // Try to delete it
     delete_tree(first);
 
-
-
-    return NULL;
+    return EXIT_SUCCESS;
 }

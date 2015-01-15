@@ -38,4 +38,5 @@ test-driver
 coverage-report*
 *.gcno
 *.gcda
-avltest
+avltest*
+*.x

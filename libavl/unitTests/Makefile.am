@@ -3,21 +3,32 @@ ACLOCAL_AMFLAGS = -I $(top_srcdir)/m4
 include $(top_srcdir)/Makefile.common
 
 # Unit test for AVL
-TESTS = avltest
-check_PROGRAMS = avltest
+TESTS = avltest01\
+		avltest02\
+		avltest03\
+		avltest04\
+		avltest05\
+		avltest06\
+		avltest07\
+		avltest08\
+		avltest09\
+		avltest10\
+		avltest11
 
-avltest_SOURCES = avl_tests.c\
-                  avl_test01.c\
-                  avl_test02.c\
-                  avl_test03.c\
-                  avl_test04.c\
-                  avl_test05.c\
-                  avl_test06.c\
-                  avl_test07.c\
-                  avl_test08.c\
-                  avl_test09.c\
-                  avl_test10.c\
-                  avl_test11.c
-avltest_CFLAGS = -I..
-avltest_LDADD = ../libavl.la
+check_PROGRAMS = $(TESTS)
+
+avltest01_SOURCES = avl_test01.c
+avltest02_SOURCES = avl_test02.c
+avltest03_SOURCES = avl_test03.c
+avltest04_SOURCES = avl_test04.c
+avltest05_SOURCES = avl_test05.c
+avltest06_SOURCES = avl_test06.c
+avltest07_SOURCES = avl_test07.c
+avltest08_SOURCES = avl_test08.c
+avltest09_SOURCES = avl_test09.c
+avltest10_SOURCES = avl_test10.c
+avltest11_SOURCES = avl_test11.c
+
+AM_CFLAGS += -I..
+LDADD = ../libavl.la
 

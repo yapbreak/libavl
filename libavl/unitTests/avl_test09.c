@@ -39,12 +39,6 @@ static int data_cmp(void *a, void *b)
     return aa.key - bb.key;
 }
 
-static void data_print(void *d)
-{
-    printf("%p|%d-%d", d,
-            ((struct _tree_data *) d)->key, ((struct _tree_data *) d)->value);
-}
-
 static void data_delete(void *d)
 {
     free(d);
@@ -66,8 +60,11 @@ static void count_treat(void *n, void *param)
     }
 }
 
-char *explore_tests()
+int main(int argc, char *argv[])
 {
+    (void) argc;
+    (void) argv;
+
     tree *first = NULL;
     struct _tree_data data[MAX_ELEMENT];
     struct _tree_data tmp_elmnt;
@@ -89,21 +86,21 @@ char *explore_tests()
     explore_tree(first, count_treat, &r);
     if (r != 0) {
         ELOG("Wrong result on NULL tree");
-        return "Wrong result on NULL tree";
+        return EXIT_FAILURE;
     }
 
     // Try to allocate a new tree.
-    first = init_dictionnary(data_cmp, data_print, data_delete, data_copy);
+    first = init_dictionnary(data_cmp, NULL, data_delete, data_copy);
     if (first == NULL) {
         ELOG("Init dictionnary error");
-        return "Init dictionnary error";
+        return EXIT_FAILURE;
     }
 
     // explore tree on an empty tree
     explore_tree(first, count_treat, &r);
     if (r != 0) {
         ELOG("Wrong result on empty tree");
-        return "Wrong result on empty tree";
+        return EXIT_FAILURE;
     }
 
     // Add data
@@ -116,7 +113,7 @@ char *explore_tests()
         result = insert_elmt(first, &(data[i]), sizeof(struct _tree_data));
         if (result != element_in_tree) {
             ELOG("Wrong result of inserted element");
-            return "Wrong result of inserted element";
+            return EXIT_FAILURE;
         }
         verif_tree(first);
     }
@@ -124,13 +121,11 @@ char *explore_tests()
     explore_tree(first, count_treat, &r);
     if (r != element_in_tree) {
         ELOG("Wrong result on empty tree: %d != %d", r, element_in_tree);
-        return "Wrong result on empty tree";
+        return EXIT_FAILURE;
     }
 
     // Try to delete it
     delete_tree(first);
 
-
-
-    return NULL;
+    return EXIT_SUCCESS;
 }

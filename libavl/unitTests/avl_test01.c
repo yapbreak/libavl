@@ -24,34 +24,22 @@
 #include "../syslog.h"
 #include "../avl.h"
 
-int data_cmp(void *a, void *b)
+int main(int argc, char *argv[])
 {
-    return (int) ((char *) a - (char *) b);
-}
+    (void) argc;
+    (void) argv;
 
-void data_print(void *d)
-{
-    printf("%p", d);
-}
-
-void data_delete(void *d)
-{
-    (void) d;
-}
-
-char *alloc_tests()
-{
     tree *first = NULL;
 
     // Try to allocate a new tree.
-    first = init_dictionnary(data_cmp, data_print, data_delete, NULL);
+    first = init_dictionnary(NULL, NULL, NULL, NULL);
     if (first == NULL) {
         ELOG("Init dictionnary error");
-        return "Init dictionnary error";
+        return EXIT_FAILURE;
     }
     if (sizeof(*first) != sizeof(tree)) {
         ELOG("Wrong returned size");
-        return "Wrong returned size";
+        return EXIT_FAILURE;
     }
 
     // Try to delete it
@@ -61,5 +49,5 @@ char *alloc_tests()
     delete_tree(NULL);
 
 
-    return NULL;
+    return EXIT_SUCCESS;
 }

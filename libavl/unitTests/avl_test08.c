@@ -52,8 +52,11 @@ static void data_delete(void *d)
 
 #define MAX_ELEMENT 10000
 
-char *print_tests()
+int main(int argc, char *argv[])
 {
+    (void) argc;
+    (void) argv;
+
     tree *first = NULL;
     struct _tree_data data[MAX_ELEMENT];
     struct _tree_data tmp_elmnt;
@@ -79,7 +82,7 @@ char *print_tests()
     first = init_dictionnary(data_cmp, data_print, data_delete, NULL);
     if (first == NULL) {
         ELOG("Init dictionnary error");
-        return "Init dictionnary error";
+        return EXIT_FAILURE;
     }
 
     // Try to print an empty tree
@@ -95,7 +98,7 @@ char *print_tests()
         result = insert_elmt(first, &(data[i]), sizeof(struct _tree_data));
         if (result != element_in_tree) {
             ELOG("Wrong result of inserted element");
-            return "Wrong result of inserted element";
+            return EXIT_FAILURE;
         }
         verif_tree(first);
     }
@@ -105,7 +108,5 @@ char *print_tests()
     // Try to delete it
     delete_tree(first);
 
-
-
-    return NULL;
+    return EXIT_SUCCESS;
 }

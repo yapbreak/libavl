@@ -103,7 +103,15 @@ int main(int argc, char *argv[])
         look_for_data.key = data[i].key;
         if (!is_present(first, &(look_for_data))) {
             element_in_tree++;
+        } else {
+            // [RMID #67] Since I get data after and insertion of already existing key
+            //            overwrite its value, I need to update value that will be tested.
+            int j = 0;
+            while (data[i].key != data[j].key)
+                j++;
+            data[i].value = data[j].value;
         }
+        DLOG("Insert <%d, %d>", data[i].key, data[i].value);
         result = insert_elmt(first, &(data[i]), sizeof(struct _tree_data));
         if (result != element_in_tree) {
             ELOG("Wrong result of inserted element");

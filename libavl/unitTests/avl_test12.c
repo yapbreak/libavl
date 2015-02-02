@@ -62,11 +62,6 @@ int main(int argc, char *argv[])
     printf("Random seed: %lu\n", rand_seed);
     srand(rand_seed);
 
-    for (i = 0; i < MAX_ELEMENT; i++) {
-        data[i].key = rand();
-        data[i].value = rand();
-    }
-
     verif_tree(first);
 
     // Try to allocate a new tree.
@@ -79,10 +74,14 @@ int main(int argc, char *argv[])
     // Add data
     verif_tree(first);
     for (i = 0; i < MAX_ELEMENT; i++) {
-        look_for_data.key = data[i].key;
-        if (!is_present(first, &(look_for_data))) {
-            element_in_tree++;
-        }
+        // [RMID #67] My keys need to be unique
+        do {
+            data[i].key = rand();
+            look_for_data.key = data[i].key;
+        } while (is_present(first, &(look_for_data)));
+        data[i].value = rand();
+        element_in_tree++;
+
         ILOG("Insert <%d, %d>", data[i].key, data[i].value);
         result = insert_elmt(first, &(data[i]), sizeof(struct _tree_data));
         if (result != element_in_tree) {

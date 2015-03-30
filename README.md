@@ -29,7 +29,19 @@ Moreover, you can add debug symbol with
 
 	$ ./configure --enable-debug
 
+## Test
+
+Unit test can be performed by running
+
+	$ make check
+
+in root folder. If coverage is enabled, you can run
+
+	$ make coverage
+
+to get a full coverage report (you need lcov to get report).
+
 ## Licence
 
 This work is published under the term of WTF-PL. You can find a copy
-of licence term in LICENSE file.
+of licence term in COPYING file.

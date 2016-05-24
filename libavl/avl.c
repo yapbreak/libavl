@@ -3,17 +3,17 @@
  *   everykind of data. You just need to implement function to compare,
  *   to desallocate and to print your structure.
  *
- *       DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE 
- *                   Version 2, December 2004 
+ *       DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+ *                   Version 2, December 2004
  *
  *   Copyright (C) 2013 Adrien Oliva <adrien.oliva@yapbreak.fr>
  *
- *   Everyone is permitted to copy and distribute verbatim or modified 
- *   copies of this license document, and changing it is allowed as long 
- *   as the name is changed. 
+ *   Everyone is permitted to copy and distribute verbatim or modified
+ *   copies of this license document, and changing it is allowed as long
+ *   as the name is changed.
  *
- *           DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE 
- *   TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION 
+ *           DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+ *   TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
  *
  *   0. You just DO WHAT THE FUCK YOU WANT TO.
  */
@@ -26,9 +26,9 @@
 #include "avl.h"
 #include "syslog.h"
 
-// ======================================================== 
+// ========================================================
 // Internal API definition
-// ======================================================== 
+// ========================================================
 /** \fn int is_present_recur(node n, void *d, int (*data_cmp) (void *, void *));
  * \brief Recursive function to check if a given data is present in tree.
  *
@@ -154,7 +154,7 @@ static int delete_node_min_recur(node *n, void (*data_delete) (void *));
  * \param data_cmp Function use to compare node.
  * \param data_delete Function use to delete node.
  * \return True if node is deleted, false else.
- * 
+ *
  * \warning If you use this function you probably make a mistake.
  */
 static int delete_node_recur(node *root, void *data,
@@ -597,13 +597,13 @@ static node equi_right(node n)
 
 static int delete_node_min_recur(node *n, void (*data_delete) (void *))
 {
-    node aux = NULL;
     int result;
 
     if (*n == NULL)
         return 0;
 
     if ((*n)->left == NULL) {
+        node aux = NULL;
         // No node in left subtree, this means that the current node
         // is the minimum node stored in tree.
         aux = *n;
@@ -627,7 +627,6 @@ static int delete_node_recur(node *root, void *data,
 {
     int cmp = 0;
     int result = 0;
-    node aux = NULL;
 
     if (*root == NULL) {
         WLOG("Node does not exist");
@@ -638,6 +637,7 @@ static int delete_node_recur(node *root, void *data,
     if (cmp == 0) {
         // Current node is the node to delete.
         if ((*root)->right == NULL) {
+            node aux = NULL;
             // simple deletion because there is no right subtree.
             // attach the left subtree instead of the deleted node
             aux = *root;
@@ -778,7 +778,7 @@ static void print_tree_recur(node t, void (*data_print) (void *))
         unsigned i = 0;
         for (i = 0; i < t->height; i++)
             printf("            ");
-        printf("[%d|%p]", t->height, t);
+        printf("[%u|%p]", t->height, t);
         data_print(t->data);
         printf("\n");
     }

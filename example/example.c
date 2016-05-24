@@ -1,15 +1,15 @@
 /****************************************************************************************
-       DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE 
-                   Version 2, December 2004 
+       DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+                   Version 2, December 2004
 
 Copyright (C) 2013 Adrien Oliva <adrien.oliva@yapbreak.fr>
 
-Everyone is permitted to copy and distribute verbatim or modified 
-copies of this license document, and changing it is allowed as long 
-as the name is changed. 
+Everyone is permitted to copy and distribute verbatim or modified
+copies of this license document, and changing it is allowed as long
+as the name is changed.
 
-           DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE 
-  TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION 
+           DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+  TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
 
  0. You just DO WHAT THE FUCK YOU WANT TO.
 ****************************************************************************************/
@@ -89,7 +89,7 @@ int main(int argc, char **argv)
     // Add element {42, 4242} in our tree.
     result = insert_elmt(avl_tree, &tmp, sizeof(struct data));
     // Here result is equal to 1 since there is only 1 element in tree.
-    printf("Result after first insert: %d\n", result);
+    printf("Result after first insert: %u\n", result);
 
     // Dump tree to stdout with data_print function
     print_tree(avl_tree);

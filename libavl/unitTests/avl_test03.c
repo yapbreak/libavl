@@ -3,17 +3,17 @@
  *   everykind of data. You just need to implement function to compare,
  *   to desallocate and to print your structure.
  *
- *       DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE 
- *                   Version 2, December 2004 
+ *       DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+ *                   Version 2, December 2004
  *
  *   Copyright (C) 2013 Adrien Oliva <adrien.oliva@yapbreak.fr>
  *
- *   Everyone is permitted to copy and distribute verbatim or modified 
- *   copies of this license document, and changing it is allowed as long 
- *   as the name is changed. 
+ *   Everyone is permitted to copy and distribute verbatim or modified
+ *   copies of this license document, and changing it is allowed as long
+ *   as the name is changed.
  *
- *           DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE 
- *   TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION 
+ *           DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+ *   TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
  *
  *   0. You just DO WHAT THE FUCK YOU WANT TO.
  */
@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
     }
 
     // Insert element already installed
-    result = insert_elmt(first, &data, sizeof(int));
+    insert_elmt(first, &data, sizeof(int));
 
     // Check if random element is present
     data++;

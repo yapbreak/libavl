@@ -17,8 +17,7 @@ AC_SUBST(VERSION_CURRENT)
 AC_SUBST(VERSION_REVISION)
 AC_SUBST(VERSION_AGE)
 
-# Checks for programs.
-AC_PROG_CC
+# Checks for programs.  AC_PROG_CC
 AM_PROG_AR
 AC_PROG_INSTALL
 AC_PROG_MAKE_SET
@@ -98,6 +97,15 @@ AC_CHECK_TYPES([ptrdiff_t size_t])
 # Checks for library functions.
 AC_FUNC_MALLOC
 AC_CHECK_FUNC([memcpy printf])
+
+# Coverage tools
+AC_CHECK_PROG([gcovr], [gcovr], [yes])
+AM_CONDITIONAL(GCOVR, test "x${gcovr}" = "xyes")
+AC_CHECK_PROG([lcov], [lcov], [yes])
+AM_CONDITIONAL(LCOV, test "x${lcov}" = "xyes")
+AC_CHECK_PROG([genhtml], [genhtml], [yes])
+AM_CONDITIONAL(GENHTML, [test "x${genhtml}" = "xyes"])
+AM_CONDITIONAL(PERLGD, [perldoc -l GD])
 
 AC_CONFIG_FILES([Makefile
                  libavl/Makefile

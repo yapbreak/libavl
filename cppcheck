@@ -1,0 +1,29 @@
+#!/bin/sh
+
+if [ ! -x /usr/bin/cppcheck ]; then
+    echo "No cppcheck found"
+    exit 127
+fi
+
+output=plain
+if [ -n "$1" ]; then
+    case "$1" in
+        "xml")
+            output=xml
+            ;;
+        "plain")
+            output=plain
+            ;;
+        *)
+            echo "Output can be plain or xml"
+            exit 127
+    esac
+fi
+
+OUTPUT_FLAGS=
+if [ "$output" == "xml" ]; then
+    OUTPUT_FLAGS="--xml --xml-version=2"
+fi
+
+/usr/bin/cppcheck --enable=all --verbose --quiet --suppress=missingIncludeSystem -I./libavl . ${OUTPUT_FLAGS}
+

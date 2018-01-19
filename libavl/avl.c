@@ -365,7 +365,7 @@ tree *init_dictionnary(int (*data_cmp)(void *, void *),
 
 unsigned int insert_elmt(tree *t, void *data, size_t datasize)
 {
-    node to_add = NULL;
+    node to_add;
     int present = 0;
 
     // Allocate memory for the new data and copy data.
@@ -603,10 +603,9 @@ static int delete_node_min_recur(node *n, void (*data_delete) (void *))
         return 0;
 
     if ((*n)->left == NULL) {
-        node aux = NULL;
+        node aux = *n;
         // No node in left subtree, this means that the current node
         // is the minimum node stored in tree.
-        aux = *n;
         *n = aux->right;
         data_delete(aux->data);
         free(aux);
@@ -637,10 +636,9 @@ static int delete_node_recur(node *root, void *data,
     if (cmp == 0) {
         // Current node is the node to delete.
         if ((*root)->right == NULL) {
-            node aux = NULL;
+            node aux = *root;
             // simple deletion because there is no right subtree.
             // attach the left subtree instead of the deleted node
-            aux = *root;
             *root = (*root)->left;
 
             // release memory used in node.

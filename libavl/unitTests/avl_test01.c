@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
     (void) argc;
     (void) argv;
 
-    tree *first = NULL;
+    tree *first;
 
     // Try to allocate a new tree.
     first = init_dictionnary(NULL, NULL, NULL, NULL);

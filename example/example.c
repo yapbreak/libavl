@@ -72,7 +72,7 @@ void data_copy(void *src, void *dst, size_t len)
 
 int main(int argc, char **argv)
 {
-    tree *avl_tree = NULL;
+    tree *avl_tree;
     struct data tmp;
     unsigned result;
 

@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
     (void) argc;
     (void) argv;
 
-    tree *first = NULL;
+    tree *first;
     int data;
     unsigned int result;
 

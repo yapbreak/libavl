@@ -1,4 +1,5 @@
-AM_CFLAGS = -Wall -Wextra -Werror ${extra_CFLAGS}
+AM_CFLAGS = -std=c11 -Wall -Wextra ${extra_CFLAGS}
+AM_CXXFLAGS = -std=c++11 -Wall -Wextra ${extra_CXXFLAGS}
 AM_LDFLAGS = ${extra_LDFLAGS}
 
 if DEBUG

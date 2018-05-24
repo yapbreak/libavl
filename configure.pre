@@ -23,22 +23,67 @@ AC_PROG_INSTALL
 AC_PROG_MAKE_SET
 LT_INIT
 
-# Checks for libraries.
+# Checks for libraries
 extra_CFLAGS=""
+extra_CXXFLAGS=""
 extra_LDFLAGS=""
+
+compiler_generic_flags=""
+compiler_c_flags=""
+compiler_cxx_flags=""
+
+GCC_VERSION=""
+GCC_VERSION_MAJOR=0
+GCC_VERSION_MINOR=0
+GCC_VERSION_PATCH=0
+
+AS_IF([test "x$GCC" = "xyes"], [
+    GCC_VERSION="$($CC -dumpversion)"
+    GCC_VERSION_MAJOR=$(echo $GCC_VERSION | cut -d'.' -f1)
+    GCC_VERSION_MINOR=$(echo $GCC_VERSION | cut -d'.' -f2)
+    GCC_VERSION_PATCH=$(echo $GCC_VERSION | cut -d'.' -f3)
+])
+
+
+AS_IF([test $GCC_VERSION_MAJOR -ge 3], [
+    compiler_generic_flags+="-Wshadow "
+    compiler_generic_flags+="-Wformat=2 "
+    compiler_cxx_flags+="-Wold-style-cast "
+])
+AS_IF([test $GCC_VERSION_MAJOR -ge 4], [
+    AS_IF([test $GCC_VERSION_MAJOR -gt 4 -o $GCC_VERSION_MINOR -ge 3], [
+        compiler_generic_flags+="-Wlogical-op "
+    ])
+    AS_IF([test $GCC_VERSION_MAJOR -gt 4 -o $GCC_VERSION_MINOR -ge 5], [
+        compiler_generic_flags+="-Wdouble-promotion "
+        compiler_c_flags+="-Wjump-misses-init "
+    ])
+    AS_IF([test $GCC_VERSION_MAJOR -gt 4 -o $GCC_VERSION_MINOR -ge 8], [
+        compiler_cxx_flags+="-Wuseless-cast "
+    ])
+])
+AS_IF([test $GCC_VERSION_MAJOR -ge 6], [
+    compiler_generic_flags+="-Wduplicated-cond "
+    compiler_generic_flags+="-Wnull-dereference "
+])
+AS_IF([test $GCC_VERSION_MAJOR -ge 7], [
+    compiler_generic_flags+="-Wduplicated-branches "
+    compiler_generic_flags+="-Wrestrict "
+])
+
+# Debug flags
 AC_ARG_ENABLE(debug,
               AS_HELP_STRING([--enable-debug],
                              [enable debugging [default: no]]),
-              [case "${enableval}" in
-                yes) debug=true ;;
-                no)  debug=false ;;
-                *) AC_MSG_ERROR([bad value ${enableval} for --enable-debug]) ;;
-              esac],
-              [debug=false])
-AM_CONDITIONAL(DEBUG, test "x$debug" = "xtrue")
+              [],
+              [enable_debug=no])
+AM_CONDITIONAL(DEBUG, test "x${enable_debug}" = "xyes")
 AM_COND_IF(DEBUG,
-           AC_DEFINE(LIBAVL_DEBUG, 1, [Define to 0 if this is a release build]),
-           AC_DEFINE(LIBAVL_DEBUG, 0, [Define to 1 or higher if this is a debug build]))
+           [AC_DEFINE(__DEBUG__, 1, [Define to 0 if this is a release build])
+            extra_CFLAGS+="-Werror -g $compiler_generic_flags $compiler_c_flags"
+            extra_CXXFLAGS+="-Werror -g $compiler_generic_flags $compiler_cxx_flags"
+           ]
+)
 AC_ARG_ENABLE(log,
               AS_HELP_STRING([--enable-log],
                              [enable log with level from 0 to 5 [default: 0]]),
@@ -71,18 +116,38 @@ AM_COND_IF(FUNLOG,
 )
 AC_ARG_ENABLE([coverage],
               AS_HELP_STRING([--enable-coverage],
-                             [enable coverage report while testing.]),
+                             [enable coverage report while testing [default: no]]),
               [],
-              [enable_coverage=false])
-if test "$GCC" = "yes"; then
-    AM_CONDITIONAL(COVERAGE, test "${enable_coverage}" = "yes")
-    AM_COND_IF(COVERAGE,
-               [extra_CFLAGS+="--coverage"
-                extra_LDFLAGS+="-lgcov"
-               ])
-fi
+              [enable_coverage=no])
+AS_IF([test "x$GCC" = "xyes"],
+      [AM_CONDITIONAL(COVERAGE, test "x${enable_coverage}" = "xyes")
+       AM_COND_IF(COVERAGE,
+                  [extra_CFLAGS+="--coverage "
+                   extra_CXXFLAGS+="--coverage "
+                   extra_LDFLAGS+="-lgcov "
+                  ])
+      ],
+      [AC_MSG_WARN([Coverage is currently not supported with a compiler other than GCC])]
+)
+
+# Profiling flags
+AC_ARG_ENABLE([profile],
+              AS_HELP_STRING([--enable-profile],
+                             [enable profiling functions while testing [default: no]]),
+              [],
+              [enable_profile=no])
+AS_IF([test "x$GCC" = "xyes"],
+      [AM_CONDITIONAL(PROFILE, test "x${enable_profile}" = "xyes")
+       AM_COND_IF(PROFILE,
+                  [extra_CFLAGS+="-pg "
+                   extra_CXXFLAGS+="-pg "
+                  ])
+      ],
+      [AC_MSG_WARN([Profiling is currently not supported with a compiler other than GCC])]
+)
 
 AC_SUBST([extra_CFLAGS])
+AC_SUBST([extra_CXXFLAGS])
 AC_SUBST([extra_LDFLAGS])
 
 # Checks for header files.
@@ -100,9 +165,11 @@ AC_CHECK_FUNC([memcpy printf])
 
 # Coverage tools
 AC_CHECK_PROG([gcovr], [gcovr], [yes])
-AM_CONDITIONAL(GCOVR, test "x${gcovr}" = "xyes")
+AM_CONDITIONAL(GCOVR, [test "x${gcovr}" = "xyes"])
+AC_CHECK_PROG([lcov_cobertura], [lcov_cobertura], [yes])
+AM_CONDITIONAL(LCOV_COBERTURA, [test "x${lcov_cobertura}" = "xyes"])
 AC_CHECK_PROG([lcov], [lcov], [yes])
-AM_CONDITIONAL(LCOV, test "x${lcov}" = "xyes")
+AM_CONDITIONAL(LCOV, [test "x${lcov}" = "xyes"])
 AC_CHECK_PROG([genhtml], [genhtml], [yes])
 AM_CONDITIONAL(GENHTML, [test "x${genhtml}" = "xyes"])
 AM_CONDITIONAL(PERLGD, [perldoc -l GD])
@@ -114,4 +181,7 @@ AC_CONFIG_FILES([Makefile
                  valgrind-driver
                  Doxyfile])
 
+AM_SILENT_RULES([yes])
 AC_OUTPUT
+
+# vi:syntax=config
